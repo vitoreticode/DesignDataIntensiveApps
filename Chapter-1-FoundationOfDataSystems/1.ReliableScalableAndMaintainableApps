@@ -1,0 +1,92 @@
+Reliability(fault-tolerant or resilient)- “continuing to work correctly, even when things go wrong.”
+
+    The system should continue to work correctly (performing the correct function at the desired level of performance) even in the face of adversity (hardware or software faults, and even human error). See “Reliability”.
+
+    - The application performs the function that the user expected.
+
+    - It can tolerate the user making mistakes or using the software in unexpected ways.
+
+    - Its performance is good enough for the required use case, under the expected load and data volume.
+
+    - The system prevents any unauthorized access and abuse.
+
+    Hardware Faults
+    Software Errors
+    Human Errors
+
+Scalability
+    
+    As the system grows (in data volume, traffic volume, or complexity), there should be reasonable ways of dealing with that growth. See “Scalability”.
+
+    Scalability is the term we use to describe a system’s ability to cope with increased load.
+
+    What happens if our load doubles?
+
+    Examples:
+        - Requests per second to a web server
+        - the ratio of reads to writes in a database
+        - the number of simultaneously active users in a chat room
+        - the hit rate on a cache
+
+    In a batch processing system such as Hadoop, we usually care about throughput—the number of records we can process per second, or the total time it takes to run a job on a dataset of a certain size.iii In online systems, what’s usually more important is the service’s response time—that is, the time between a client sending a request and receiving a response.
+
+    LATENCY AND RESPONSE TIME
+        Latency and response time are often used synonymously, but they are not the same. The response time is what the client sees: besides the actual time to process the request (the service time), it includes network delays and queueing delays. Latency is the duration that a request is waiting to be handled—during which it is latent, awaiting service
+
+    Random additional latency could be introduced by a context switch to a background process, the loss of a network packet and TCP retransmission, a garbage collection pause, a page fault forcing a read from disk, mechanical vibrations in the server rack
+
+    Percentiles is better to measure response time, than mean average
+
+    An elastic system can be useful if load is highly unpredictable, but manually scaled systems are simpler and may have fewer operational surprises
+
+    While distributing stateless services across multiple machines is fairly straightforward, taking stateful data systems from a single node to a distributed setup can introduce a lot of additional complexity. For this reason, common wisdom until recently was to keep your database on a single node (scale up) until scaling cost or high-availability requirements forced you to make it distributed.
+
+Maintainability
+    
+    Over time, many different people will work on the system (engineering and operations, both maintaining current behavior and adapting the system to new use cases), and they should all be able to work on it productively. See “Maintainability”.
+
+    We can and should design software in such a way that it will hopefully minimize pain during maintenance, and thus avoid creating legacy software ourselves. To this end, we will pay particular attention to three design principles for software systems:
+
+        Operability: Making Life Easy for Operations
+            Make it easy for operations teams to keep the system running smoothly.
+
+            Good operability means making routine tasks easy, allowing the operations team to focus their efforts on high-value activities. Data systems can do various things to make routine tasks easy, including:
+
+                - Providing visibility into the runtime behavior and internals of the system, with good monitoring
+
+                - Providing good support for automation and integration with standard tools
+
+                - Avoiding dependency on individual machines (allowing machines to be taken down for maintenance while the system as a whole continues running uninterrupted)
+
+                - Providing good documentation and an easy-to-understand operational model (“If I do X, Y will happen”)
+
+                - Providing good default behavior, but also giving administrators the freedom to override defaults when needed
+
+                - Self-healing where appropriate, but also giving administrators manual control over the system state when needed
+
+                - Exhibiting predictable behavior, minimizing surprises
+
+        Simplicity: Managing Complexity
+
+            Make it easy for new engineers to understand the system, by removing as much complexity as possible from the system. (Note this is not the same as simplicity of the user interface.)
+
+            Small software projects can have delightfully simple and expressive code, but as projects get larger, they often become very complex and difficult to understand. This complexity slows down everyone who needs to work on the system, further increasing the cost of maintenance. A software project mired in complexity is sometimes described as a big ball of mud.
+
+            There are various possible symptoms of complexity: 
+                - explosion of the state space
+                - tight coupling of modules, tangled dependencies
+                - inconsistent naming and terminology
+                - hacks aimed at solving performance problems
+                - special-casing to work around issues elsewhere
+
+            Moseley and Marks [32] define complexity as accidental if it is not inherent in the problem that the software solves (as seen by the users) but arises only from the implementation.
+
+            One of the best tools we have for removing accidental complexity is abstraction.Good abstraction can hide a great deal of implementation detail behind a clean, simple-to-understand façade. Not only is this reuse more efficient than reimplementing a similar thing multiple times, but it also leads to higher-quality software, as quality improvements in the abstracted component benefit all applications that use it.
+
+        Evolvability: Making Change Easy
+
+            Make it easy for engineers to make changes to the system in the future, adapting it for unanticipated use cases as requirements change. Also known as extensibility, modifiability, or plasticity.
+
+            In terms of organizational processes, Agile working patterns provide a framework for adapting to change. The Agile community has also developed technical tools and patterns that are helpful when developing software in a frequently changing environment, such as test-driven development (TDD) and refactoring.
+
+            The ease with which you can modify a data system, and adapt it to changing requirements, is closely linked to its simplicity and its abstractions: simple and easy-to-understand systems are usually easier to modify than complex ones. 
